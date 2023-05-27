@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "JPDict2 (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "JPDict2 (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
