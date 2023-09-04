@@ -166,4 +166,33 @@ public sealed partial class SearchDetailControl : UserControl
         }
         
     }
+
+    private async void ShowCalligraphyFlyout_Button_Click(object sender, RoutedEventArgs e)
+    {
+        ContentDialog contentDialog = new ContentDialog();
+        contentDialog.XamlRoot = this.XamlRoot;
+        contentDialog.Title = "Writing Practice";
+        contentDialog.PrimaryButtonText = "Done";
+        CalligraphyFlyout flyoutContent = new CalligraphyFlyout();
+        if (((HyperlinkButton)sender).Tag is Tuple<string, List<KanjiGuideStep>> tuple)
+        {
+            flyoutContent.Character = tuple.Item1;
+            flyoutContent.StrokesGuide = tuple.Item2;
+        }
+        contentDialog.Content = flyoutContent;
+        contentDialog.DefaultButton = ContentDialogButton.Primary;
+        await contentDialog.ShowAsync();
+    }
+
+    /// <summary>
+    /// Helper function for creating a tuple of kanji character (string) and kanji stroke guides (List<KanjiGuideStep>)
+    /// for data binding as XAML does not support generics. The tuple will be passed to CalligraphyFlyout.
+    /// </summary>
+    /// <param name="kanji"></param>
+    /// <param name="guide"></param>
+    /// <returns></returns>
+    public static Tuple<string, List<KanjiGuideStep>> CreateKanjiGuideTuple(string kanji, List<KanjiGuideStep> guide)
+    {
+        return Tuple.Create<string, List<KanjiGuideStep>>(kanji, guide);
+    }
 }

@@ -4,6 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:helpers="using:JPDict2.Helpers"
+    xmlns:sys="using:System"
+    xmlns:model="using:JPDict2.Core.Models"
+    xmlns:views="using:JPDict2.Views"
     mc:Ignorable="d"
     x:Name="_this">
     <UserControl.Resources>
@@ -103,15 +106,16 @@
                     </TransitionCollection>
                 </VariableSizedWrapGrid.ChildrenTransitions>
                 <Grid x:Name="KanjiPanel"
-                      Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+                      Background="{ThemeResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
                       Height="400" 
                       MinWidth="400"
-                      BorderBrush="{StaticResource ControlElevationBorderBrush}" 
+                      BorderBrush="{ThemeResource ControlElevationBorderBrush}" 
                       BorderThickness="2" 
                       CornerRadius="8" 
                       Margin="0,12,12,0"
                       VariableSizedWrapGrid.RowSpan="1"
-                      VariableSizedWrapGrid.ColumnSpan="1">
+                      VariableSizedWrapGrid.ColumnSpan="1"
+                      Visibility="{Binding ElementName=_this, Path=KanjiCharacters, Converter={StaticResource NullToVisibilityConverter}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -120,31 +124,40 @@
                     <TextBlock Grid.Row="0" Style="{StaticResource SubtitleTextBlockStyle}" Margin="24,24,0,0">Kanji</TextBlock>
                     <FlipView Grid.Row="1" x:Name="Kanji_FlipView" ItemsSource="{Binding ElementName=_this, Path=KanjiCharacters}" Width="400" Height="270" Background="Transparent">
                         <FlipView.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate x:DataType="model:KanjiEntry">
                                 <ScrollViewer>
                                     <StackPanel Padding="24,0,24,8">
                                         <Grid>
                                             <TextBlock Text="{Binding Kanji}" Style="{StaticResource TitleLargeTextBlockStyle}" FontWeight="Normal" FontFamily="Assets/UDDigiKyokashoN-R# UD Digi Kyokasho N-R"
                                                Margin="{StaticResource MediumTopMargin}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                            <HyperlinkButton x:Name="ShowHandwritingButton" HorizontalAlignment="Right" Margin="{StaticResource MediumTopMargin}" Click="ShowHandwritingButton_Click">
+                                            <HyperlinkButton x:Name="ShowHandwritingButton" HorizontalAlignment="Right" Margin="{StaticResource MediumTopMargin}" Click="ShowHandwritingButton_Click"
+                                                             Visibility="{Binding KanjiWritingGuide, Converter={StaticResource NullToVisibilityConverter}}">
                                                 <FontIcon Glyph="&#xEDC6;" />
                                                 <HyperlinkButton.Resources>
                                                     <TeachingTip x:Name="HandwritingGuide"
                                                          Title="Handwriting Guide">
                                                         <TeachingTip.Content>
-                                                            <GridView ItemsSource="{Binding KanjiWritingGuide}" MaxWidth="400" Margin="0,12,0,0" SelectionMode="None" HorizontalAlignment="Left">
-                                                                <GridView.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <Grid Width="60" Height="60">
-                                                                            <Rectangle Fill="White" Stroke="LightGray" Width="80" Height="80"/>
-                                                                            <Line X1="0" X2="60" Y1="30" Y2="30" StrokeDashArray="2,2" Stroke="LightGray"/>
-                                                                            <Line X1="30" X2="30" Y1="0" Y2="60" StrokeDashArray="2.2" Stroke="LightGray"/>
-                                                                            <Path x:Name="KanjiSvg" Stroke="{StaticResource AccentAAFillColorTertiaryBrush}" Height="40" Width="40" Margin="0,0,4,4" Data="{Binding SVGPath}" Loaded="KanjiSvg_Loaded">
-                                                                            </Path>
-                                                                        </Grid>
-                                                                    </DataTemplate>
-                                                                </GridView.ItemTemplate>
-                                                            </GridView>
+                                                            <StackPanel>
+                                                                <HyperlinkButton x:Name="ShowCalligraphyFlyout_Button" Margin="-10,8,0,0" Click="ShowCalligraphyFlyout_Button_Click" Tag="{x:Bind views:SearchDetailControl.CreateKanjiGuideTuple(Kanji, KanjiWritingGuide)}">
+                                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                        <FontIcon Glyph="&#xE929;" />
+                                                                        <TextBlock Margin="8,0,0,0">Practice</TextBlock>
+                                                                    </StackPanel>
+                                                                </HyperlinkButton>
+                                                                <GridView ItemsSource="{Binding KanjiWritingGuide}" MaxWidth="400" Margin="0,12,0,0" SelectionMode="None" HorizontalAlignment="Left">
+                                                                    <GridView.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Grid Width="60" Height="60">
+                                                                                <Rectangle Fill="White" Stroke="LightGray" Width="80" Height="80"/>
+                                                                                <Line X1="0" X2="60" Y1="30" Y2="30" StrokeDashArray="2,2" Stroke="LightGray"/>
+                                                                                <Line X1="30" X2="30" Y1="0" Y2="60" StrokeDashArray="2.2" Stroke="LightGray"/>
+                                                                                <Path x:Name="KanjiSvg" Stroke="{StaticResource AccentAAFillColorTertiaryBrush}" Height="40" Width="40" Margin="0,0,4,4" Data="{Binding SVGPath}" Loaded="KanjiSvg_Loaded">
+                                                                                </Path>
+                                                                            </Grid>
+                                                                        </DataTemplate>
+                                                                    </GridView.ItemTemplate>
+                                                                </GridView>
+                                                            </StackPanel>
                                                         </TeachingTip.Content>
                                                     </TeachingTip>
                                                 </HyperlinkButton.Resources>
@@ -209,10 +222,10 @@
 
                 </Grid>
                 <Grid x:Name="ConjugationPanel"
-                      Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+                      Background="{ThemeResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
                       Height="400" 
                       MinWidth="400" 
-                      BorderBrush="{StaticResource ControlElevationBorderBrush}" 
+                      BorderBrush="{ThemeResource ControlElevationBorderBrush}" 
                       BorderThickness="2" 
                       CornerRadius="8" 
                       Margin="0,12,12,0"

@@ -7,6 +7,137 @@
     mc:Ignorable="d">
 
     <Grid x:Name="ContentArea">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="IntermediateLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1000" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RightPanel_Grid.(Grid.Row)" Value="0" />
+                        <Setter Target="RightPanel_Grid.(Grid.Column)" Value="1" />
+                        <Setter Target="RightPanel_Grid.Padding" Value="48,-48,0,0" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="PhoneLayout">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="RightPanel_Grid.(Grid.Row)" Value="1" />
+                        <Setter Target="RightPanel_Grid.(Grid.Column)" Value="0" />
+                        <Setter Target="RightPanel_Grid.Margin" Value="0,24,0,0" />
+                        <Setter Target="RightPanelBackground_Canvas.Visibility" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="400"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <RepositionThemeTransition />
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
         
+        <Grid x:Name="LeftPanel_Grid" Grid.Column="0" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock  Text="Sentence of the Day" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+                    <FlipView MaxWidth="400" Height="200" 
+                                BorderBrush="{ThemeResource ControlElevationBorderBrush}" 
+                                BorderThickness="2" 
+                                CornerRadius="8"
+                                HorizontalAlignment="Left"
+                                Margin="-4,48,0,24">
+                        <Grid CornerRadius="8">
+                            <Image Source="ms-appx:///Assets/CardBackgroundPictures/4.jpg" Stretch="UniformToFill"/>
+                            <StackPanel Margin="24">
+                                <TextBlock Text="犬は三日飼えば恩を忘れず、猫は三年の恩を三日に忘れる"
+                                            Foreground="White" 
+                                            Style="{StaticResource SubtitleTextBlockStyle}" 
+                                            FontFamily="Assets/UDDigiKyokashoN-R# UD Digi Kyokasho N-R"/>
+                                <TextBlock Text="いぬはみっかかえばおんをわすれず、ねこはさんねんのおんをみっかにわすれる"
+                                            Foreground="White"
+                                            Opacity="0.7"
+                                            Style="{StaticResource CaptionTextBlockStyle}" 
+                                            FontFamily="Assets/UDDigiKyokashoN-R# UD Digi Kyokasho N-R"/>
+                                <TextBlock Foreground="White" Style="{StaticResource BodyTextBlockStyle}" Margin="{StaticResource SmallTopMargin}">keep a dog for three days and he will not forget your kindness, but a cat will forget in three days</TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </FlipView>
+                </Grid>
+
+                <TextBlock Grid.Row="1" Style="{StaticResource SubtitleTextBlockStyle}" Text="Search History"></TextBlock>
+            </Grid>
+        </Grid>
+        <Canvas x:Name="RightPanelBackground_Canvas" Background="{ThemeResource LayerFillColorDefaultBrush}" Width="600" Grid.ColumnSpan="2" Grid.Column="1" Grid.RowSpan="2" Margin="0,-100,0,0">
+        </Canvas>
+        <Grid x:Name="RightPanel_Grid" Grid.Column="0" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="NHK Easy News" Style="{StaticResource SubtitleTextBlockStyle}"></TextBlock>
+                <ListView Grid.Row="1"></ListView>
+                <Grid Background="{ThemeResource LayerOnAccentAcrylicFillColorDefaultBrush}"
+                      Grid.Row="1"
+                      Height="100"
+                      MinWidth="300"
+                      BorderBrush="{ThemeResource ControlElevationBorderBrush}" 
+                      BorderThickness="2"
+                      CornerRadius="8" 
+                      Margin="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Column="0" Width="120" Height="100" HorizontalAlignment="Left" CornerRadius="8,0,0,8">
+                            <Image Source="ms-appx:///Assets/CardBackgroundPictures/0.jpg" Stretch="UniformToFill" />
+                        </Border>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Style="{StaticResource DetailSubTitleStyle}" TextWrapping="Wrap" Height="50" Margin="12,12,12,0">100年前の関東大震災　東京の様子がわかる写真 100年前の関東大震災　東京の様子がわかる写真 100年前の関東大震災　東京の様子がわかる写真</TextBlock>
+                            <HyperlinkButton>
+                                <HyperlinkButton.Resources>
+                                    <SolidColorBrush x:Key="HyperlinkButtonBackgroundPointerOver" Color="Transparent"/>
+                                    <SolidColorBrush x:Key="HyperlinkButtonBackgroundPressed" Color="Transparent"/>
+                                </HyperlinkButton.Resources>
+                                <HyperlinkButton.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <FontIcon Glyph="&#xE8AD;" FontSize="12"/>
+                                        <TextBlock Margin="{StaticResource XSmallLeftMargin}">Read</TextBlock>
+                                    </StackPanel>
+                                </HyperlinkButton.Content>
+                            </HyperlinkButton>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
     </Grid>
 </Page>

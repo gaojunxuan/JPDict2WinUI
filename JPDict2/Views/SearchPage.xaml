@@ -92,10 +92,10 @@
                     <TextBox x:Name="SearchBox" TextChanged="SearchBox_TextChanged" Loaded="SearchBox_Loaded" PlaceholderText="Enter a keyword or sentence"></TextBox>
 
                     <Grid x:Name="LemmatizerPanel"
-                          Background="{StaticResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
+                          Background="{ThemeResource LayerOnAccentAcrylicFillColorDefaultBrush}" 
                           MinHeight="100"
                           MinWidth="200"
-                          BorderBrush="{StaticResource ControlElevationBorderBrush}" 
+                          BorderBrush="{ThemeResource ControlElevationBorderBrush}" 
                           BorderThickness="2"
                           CornerRadius="4" 
                           Margin="0,12,0,0"
